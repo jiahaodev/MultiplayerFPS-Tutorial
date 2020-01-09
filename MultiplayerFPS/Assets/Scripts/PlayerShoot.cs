@@ -1,0 +1,61 @@
+/****************************************************
+    文件：PlayerShoot.cs
+	作者：JiahaoWu
+    邮箱: jiahaodev@163.com
+    日期：2020/01/10 01:19
+	功能：玩家射击脚本
+*****************************************************/
+
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Networking;
+
+public class PlayerShoot : NetworkBehaviour 
+{
+    private const string PLAYER_TAG = "Player";
+
+    public PlayerWeapon weapon;
+
+    [SerializeField]
+    private Camera cam;
+
+    [SerializeField]
+    private LayerMask mask;
+
+    private void Start()
+    {
+        if (cam == null)
+        {
+            Debug.LogError("PlayerShoot: No camera referenced!");
+            this.enabled = false;
+        }
+    }
+
+    private void Update()
+    {
+        if (Input.GetButtonDown("Fire1"))
+        {
+            Shoot();
+        }
+    }
+
+    [Client]
+    private void Shoot() {
+        RaycastHit _hit;
+        if (Physics.Raycast(cam.transform.position,cam.transform.forward,out _hit,weapon.range,mask))
+        {
+            if (_hit.collider.tag == PLAYER_TAG)
+            {
+                CmdPlayerShoot(_hit.collider.name);
+            }
+        }
+    }
+
+    [Command]
+    private void CmdPlayerShoot(string _ID)
+    {
+        Debug.Log(_ID + " has been shoot");
+    }
+}

@@ -11,10 +11,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class PlayerSetup : NetworkBehaviour 
+public class PlayerSetup : NetworkBehaviour
 {
     [SerializeField]
     Behaviour[] componentsToDisable;
+
+    [SerializeField]
+    string remoteLayerName = "RemotePlayer";
 
     Camera sceneCamera;
 
@@ -24,18 +27,36 @@ public class PlayerSetup : NetworkBehaviour
         //active on the player that we control
         if (!isLocalPlayer)
         {
-            for (int i = 0; i < componentsToDisable.Length; i++)
-            {
-                componentsToDisable[i].enabled = false;
-            }
+            DisableComponents();
+            AssignRemoteLayer();
         }
         else
         {
             sceneCamera = Camera.main;
-            if (sceneCamera !=null)
+            if (sceneCamera != null)
             {
                 sceneCamera.gameObject.SetActive(false);
             }
+        }
+
+        RegisterPlayer();
+    }
+
+
+    private void RegisterPlayer() {
+        string _ID = "Player " + GetComponent<NetworkIdentity>().netId;
+        gameObject.name = _ID;
+    }
+
+    private void AssignRemoteLayer() {
+        gameObject.layer = LayerMask.NameToLayer(remoteLayerName);
+    }
+
+
+    private void DisableComponents(){
+        for (int i = 0; i < componentsToDisable.Length; i++)
+        {
+            componentsToDisable[i].enabled = false;
         }
     }
 
