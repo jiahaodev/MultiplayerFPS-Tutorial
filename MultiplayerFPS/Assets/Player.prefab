@@ -655,6 +655,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
+  disableOnDeath:
+  - {fileID: 8771881880304625133}
+  - {fileID: 1085761101514549189}
 --- !u!1 &8771881881070222090
 GameObject:
   m_ObjectHideFlags: 0

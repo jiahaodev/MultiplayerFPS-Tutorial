@@ -40,6 +40,8 @@ public class PlayerSetup : NetworkBehaviour
                 sceneCamera.gameObject.SetActive(false);
             }
         }
+
+        GetComponent<Player>().Setup();
     }
 
     public override void OnStartClient()
@@ -56,7 +58,6 @@ public class PlayerSetup : NetworkBehaviour
     private void AssignRemoteLayer() {
         gameObject.layer = LayerMask.NameToLayer(remoteLayerName);
     }
-
 
     private void DisableComponents(){
         for (int i = 0; i < componentsToDisable.Length; i++)
