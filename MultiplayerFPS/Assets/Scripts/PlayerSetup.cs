@@ -6,6 +6,7 @@
 	功能：启动时设置玩家，动态设置Player组件的启动/禁用
 *****************************************************/
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,6 +21,16 @@ public class PlayerSetup : NetworkBehaviour
 
     [SerializeField]
     string remoteLayerName = "RemotePlayer";
+
+    [SerializeField]
+    string dontDrawLayerName = "DontDraw";
+    [SerializeField]
+    GameObject playerGraphics;
+
+    [SerializeField]
+    GameObject playerUIPrefab;
+    private GameObject playerUIInstance;
+
 
     Camera sceneCamera;
 
@@ -39,9 +50,27 @@ public class PlayerSetup : NetworkBehaviour
             {
                 sceneCamera.gameObject.SetActive(false);
             }
+
+            //Disable player graphics for local player
+            SetLayerRecursively(playerGraphics,LayerMask.NameToLayer(dontDrawLayerName));
+
+            //Create PlayerUI
+            playerUIInstance = Instantiate(playerUIPrefab);
+            playerUIInstance.name = playerUIPrefab.name;
+
         }
 
         GetComponent<Player>().Setup();
+    }
+
+    private void SetLayerRecursively(GameObject obj, int newLayer)
+    {
+        obj.layer = newLayer;
+
+        foreach (Transform child in obj.transform)
+        {
+            SetLayerRecursively(child.gameObject,newLayer);
+        }
     }
 
     public override void OnStartClient()
@@ -69,6 +98,8 @@ public class PlayerSetup : NetworkBehaviour
     //when we are destroyed
     private void OnDisable()
     {
+        Destroy(playerUIInstance);
+
         //Re-enable the scene camera
         if (sceneCamera != null)
         {
@@ -78,5 +109,5 @@ public class PlayerSetup : NetworkBehaviour
         GameManager.UnRegisterPlayer(transform.name);
     }
 
-
+     
 }
