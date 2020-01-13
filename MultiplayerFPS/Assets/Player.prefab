@@ -9662,7 +9662,6 @@ MonoBehaviour:
   - {fileID: 11433214}
   - {fileID: 2047062}
   - {fileID: 8100924}
-  - {fileID: 11433114}
   - {fileID: 9504178}
   - {fileID: 6991370720776136514}
   remoteLayerName: RemotePlayer
@@ -9896,8 +9895,7 @@ MonoBehaviour:
     damage: 5
     range: 100
     fireRate: 10
-    graphics: {fileID: 738932674027021819, guid: 1ee05988352fbd649a424971288b0dfe,
-      type: 3}
+    graphics: {fileID: 199728, guid: ed705c92b28f65f4f99f5b76f9f51ecc, type: 3}
 --- !u!1 &123372
 GameObject:
   m_ObjectHideFlags: 0
