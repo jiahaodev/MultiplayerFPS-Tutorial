@@ -41,29 +41,55 @@ public class Player : NetworkBehaviour
     [SerializeField]
     private GameObject spawnEffect;
 
-    public void Setup()
+    private bool firstSetup = true;
+
+    public void SetupPlayer()
     {
-        wasEnabled = new bool[disableOnDeath.Length];
-        for (int i = 0; i < wasEnabled.Length; i++)
+        if (isLocalPlayer)
         {
-            wasEnabled[i] = disableOnDeath[i].enabled;
+            //Switch cameras
+            GameManager.instance.SetSceneCameraActive(false);
+            GetComponent<PlayerSetup>().playerUIInstance.SetActive(true);
+        }
+
+        CmdBroadCastNewPlayerSetup();
+
+    }
+
+    [Command]
+    private void CmdBroadCastNewPlayerSetup()
+    {
+        RpcSetupPlayerOnAllClients();
+    }
+
+    [ClientRpc]
+    private void RpcSetupPlayerOnAllClients()
+    {
+        if (firstSetup)
+        {
+            wasEnabled = new bool[disableOnDeath.Length];
+            for (int i = 0; i < wasEnabled.Length; i++)
+            {
+                wasEnabled[i] = disableOnDeath[i].enabled;
+            }
+
+            firstSetup = false;
         }
 
         SetDefaults();
-
     }
 
-    private void Update()
-    {
-        if (!isLocalPlayer)
-            return;
+    //private void Update()
+    //{
+    //    if (!isLocalPlayer)
+    //        return;
 
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            RpcTakeDamage(9999);
-        }
+    //    if (Input.GetKeyDown(KeyCode.K))
+    //    {
+    //        RpcTakeDamage(9999);
+    //    }
 
-    }
+    //} 
 
     [ClientRpc]
     public void RpcTakeDamage(int _amount)
@@ -122,12 +148,13 @@ public class Player : NetworkBehaviour
     {
         yield return new WaitForSeconds(GameManager.instance.matchSettings.respawnTime);
 
-
         Transform _spawnPoint = NetworkManager.singleton.GetStartPosition();
         transform.position = _spawnPoint.position;
         transform.rotation = _spawnPoint.rotation;
 
-        SetDefaults();
+        yield return new WaitForSeconds(0.1f);
+
+        SetupPlayer();
 
         Debug.Log(transform.name + " respawned.");
     }
