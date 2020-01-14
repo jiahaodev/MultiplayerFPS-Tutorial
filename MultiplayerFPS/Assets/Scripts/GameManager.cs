@@ -16,9 +16,12 @@ public class GameManager : MonoBehaviour
 
     public MatchSettings matchSettings;
 
+    [SerializeField]
+    private GameObject sceneCamera;
+
     private void Awake()
     {
-        if (instance !=null)
+        if (instance != null)
         {
             Debug.LogError("More than one GameManager in scene");
         }
@@ -26,6 +29,13 @@ public class GameManager : MonoBehaviour
         {
             instance = this;
         }
+    }
+
+    public void SetSceneCameraActive(bool isActive) {
+        if (sceneCamera == null)
+            return;
+
+        sceneCamera.SetActive(isActive);
     }
 
 

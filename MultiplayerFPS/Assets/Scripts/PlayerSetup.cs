@@ -30,10 +30,9 @@ public class PlayerSetup : NetworkBehaviour
 
     [SerializeField]
     GameObject playerUIPrefab;
-    private GameObject playerUIInstance;
+    [HideInInspector]
+    public GameObject playerUIInstance;
 
-
-    Camera sceneCamera;
 
     private void Start()
     {
@@ -46,12 +45,6 @@ public class PlayerSetup : NetworkBehaviour
         }
         else
         {
-            sceneCamera = Camera.main;
-            if (sceneCamera != null)
-            {
-                sceneCamera.gameObject.SetActive(false);
-            }
-
             //Disable player graphics for local player
             SetLayerRecursively(playerGraphics,LayerMask.NameToLayer(dontDrawLayerName));
 
@@ -107,11 +100,7 @@ public class PlayerSetup : NetworkBehaviour
     {
         Destroy(playerUIInstance);
 
-        //Re-enable the scene camera
-        if (sceneCamera != null)
-        {
-            sceneCamera.gameObject.SetActive(false);
-        }
+        GameManager.instance.SetSceneCameraActive(true);
 
         GameManager.UnRegisterPlayer(transform.name);
     }
