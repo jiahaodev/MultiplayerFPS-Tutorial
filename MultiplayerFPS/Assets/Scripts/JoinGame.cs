@@ -40,7 +40,7 @@ public class JoinGame : MonoBehaviour
         RefreshRoomList();
     }
 
-    private void RefreshRoomList()
+    public void RefreshRoomList()
     {
         ClearRoomList();
         networkManager.matchMaker.ListMatches(0, 20, "", true, 0, 0, OnMatchList);

@@ -6,6 +6,7 @@
 	功能：Player UI Canvas 管理
 *****************************************************/
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,6 +15,9 @@ public class PlayerUI : MonoBehaviour
 {
     [SerializeField]
     RectTransform thrusterFuelFill;
+
+    [SerializeField]
+    GameObject pauseMenu;
 
     private PlayerController controller;
 
@@ -26,10 +30,24 @@ public class PlayerUI : MonoBehaviour
         thrusterFuelFill.localScale = new Vector3(1f,_amount,1f);
     }
 
+    private void Start()
+    {
+        PauseMenu.IsOn = false;
+    }
+
     private void Update()
     {
         SetFuelAmount(controller.GetThrusterFuelAmount());
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            TogglePauseMenu();
+        }
     }
 
-
+    private void TogglePauseMenu()
+    {
+        pauseMenu.SetActive(!pauseMenu.activeSelf);
+        PauseMenu.IsOn = pauseMenu.activeSelf;
+    }
 }
