@@ -3,7 +3,7 @@
 	作者：JiahaoWu
     邮箱: jiahaodev@163.com
     日期：2020/01/19 09:56
-	功能：Nothing
+	功能：用于创建房间
 *****************************************************/
 
 using System.Collections;
