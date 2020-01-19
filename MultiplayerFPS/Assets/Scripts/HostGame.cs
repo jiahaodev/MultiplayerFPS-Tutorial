@@ -6,6 +6,7 @@
 	功能：用于创建房间
 *****************************************************/
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -32,11 +33,21 @@ public class HostGame : MonoBehaviour
     //监听OnValueChanged没有搜到正确字符，改为监听OnEndEdit
     public void SetRoomName(string _name)
     {
+        //Debug.Log("SetRoomName :" + _name);
         roomName = _name;
     }
 
     public void CreateRoom()
     {
+        //Debug.Log("roomName :" + roomName);
+        if (string.IsNullOrEmpty(roomName)) {
+            string timeStr = DateTime.Now.Ticks.ToString();
+            roomName = "default" + timeStr;
+
+            Debug.Log("roomName :" + roomName);
+        
+        }
+
         if (roomName != "" && roomName != null)
         {
             Debug.Log("Create Room: " + roomName + " with room for " + roomSize + " players.");
